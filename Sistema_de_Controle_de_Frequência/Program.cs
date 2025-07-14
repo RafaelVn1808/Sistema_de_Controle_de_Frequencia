@@ -1,3 +1,5 @@
+using Sistema_de_Controle_de_Frequência.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,3 +25,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
