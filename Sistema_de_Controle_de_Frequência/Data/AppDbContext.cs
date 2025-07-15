@@ -11,8 +11,8 @@ namespace Sistema_de_Controle_de_Frequência.Data {
         public DbSet<Nucleo> Nucleos { get; set; }
         public DbSet<Setor> Setores { get; set; }
         public DbSet<Servidor> Servidores { get; set; }
-        public DbSet<StatusFrequencia> StatusFrequencias { get; set; }
         public DbSet<Frequencia> Frequencias { get; set; }
+        public DbSet<StatusFrequencia> StatusFrequencias { get; set; }
         public DbSet<FrequenciaServidor> FrequenciasServidores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {

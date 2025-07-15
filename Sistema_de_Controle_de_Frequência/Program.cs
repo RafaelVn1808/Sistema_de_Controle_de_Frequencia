@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Sistema_de_Controle_de_Frequência.Data;
 
 var builder = WebApplication.CreateBuilder(args);
