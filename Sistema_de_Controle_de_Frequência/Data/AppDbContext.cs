@@ -21,14 +21,16 @@ namespace Sistema_de_Controle_de_Frequência.Data {
             modelBuilder.Entity<FrequenciaServidor>()
                 .HasOne(fs => fs.Frequencia)
                 .WithMany(f => f.FrequenciasServidores)
-                .HasForeignKey(fs => fs.FrequenciaId);
+                .HasForeignKey(fs => fs.FrequenciaId)
+                .OnDelete(DeleteBehavior.NoAction); 
 
             modelBuilder.Entity<FrequenciaServidor>()
                 .HasOne(fs => fs.Servidor)
                 .WithMany(s => s.FrequenciasServidores)
-                .HasForeignKey(fs => fs.ServidorId);
+                .HasForeignKey(fs => fs.ServidorId)
+                .OnDelete(DeleteBehavior.NoAction); 
 
-            // Configuração das entidades (opcionalmente você pode usar FluentAPI aqui)
+            // Configuração das entidades
             modelBuilder.Entity<Nucleo>().ToTable("Nucleo");
             modelBuilder.Entity<Setor>().ToTable("Setor");
             modelBuilder.Entity<Servidor>().ToTable("Servidor");
@@ -36,6 +38,7 @@ namespace Sistema_de_Controle_de_Frequência.Data {
             modelBuilder.Entity<Frequencia>().ToTable("Frequencia");
             modelBuilder.Entity<FrequenciaServidor>().ToTable("Frequencia_Servidor");
         }
+
 
     }
 }
