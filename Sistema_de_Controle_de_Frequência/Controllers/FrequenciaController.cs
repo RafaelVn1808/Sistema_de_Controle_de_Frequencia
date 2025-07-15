@@ -35,13 +35,26 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Frequencia frequencia)
         {
-            await _service.AddFrequenciaAsync(frequencia);
-            return CreatedAtAction(nameof(Get), new { id = frequencia.Id }, frequencia);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                await _service.AddFrequenciaAsync(frequencia);
+                return CreatedAtAction(nameof(Get), new { id = frequencia.Id }, frequencia);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Frequencia frequencia)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (id != frequencia.Id)
                 return BadRequest();
 

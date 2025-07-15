@@ -35,3 +35,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IFrequenciaRepository, FrequenciaRepository>();
 builder.Services.AddScoped<FrequenciaService>();
 
+builder.Services.AddScoped<ISetorRepository, SetorRepository>();
+builder.Services.AddScoped<IStatusFrequenciaRepository, StatusFrequenciaRepository>();
+
