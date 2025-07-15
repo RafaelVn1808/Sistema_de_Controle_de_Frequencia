@@ -68,5 +68,24 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
             await _service.DeleteFrequenciaAsync(id);
             return NoContent();
         }
+
+        [HttpGet("pdf")]
+        public async Task<IActionResult> GetRelatorioPdf()
+        {
+            var frequencias = await _service.GetAllFrequenciasAsync();
+            var pdfBytes = _service.GerarRelatorioPdf(frequencias);
+            return File(pdfBytes, "application/pdf", "RelatorioFrequencias.pdf");
+        }
+
+        [HttpGet("excel")]
+        public async Task<IActionResult> GetRelatorioExcel()
+        {
+            var frequencias = await _service.GetAllFrequenciasAsync();
+            var excelBytes = _service.GerarRelatorioExcel(frequencias);
+            return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RelatorioFrequencias.xlsx");
+        }
+
+
+
     }
 }

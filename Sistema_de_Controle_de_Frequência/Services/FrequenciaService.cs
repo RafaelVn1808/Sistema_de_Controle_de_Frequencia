@@ -1,5 +1,7 @@
-﻿using Sistema_de_Controle_de_Frequência.Models;
+﻿using QuestPDF.Fluent;
+using Sistema_de_Controle_de_Frequência.Models;
 using Sistema_de_Controle_de_Frequência.Repositories;
+using ClosedXML.Excel;
 
 namespace Sistema_de_Controle_de_Frequência.Services
 {
@@ -65,5 +67,37 @@ namespace Sistema_de_Controle_de_Frequência.Services
             if (frequencia.DataEnvio.Date > DateTime.Today)
                 throw new ArgumentException("Data de envio não pode ser uma data futura.");
         }
+
+        //Método para gerar o relatório PDF
+        public byte[] GerarRelatorioPdf(IEnumerable<Frequencia> frequencias)
+        {
+            var documento = new FrequenciaReportDocument(frequencias);
+            return documento.GeneratePdf();
+        }
+
+        //étodo para gerar o relatório Excel
+        public byte[] GerarRelatorioExcel(IEnumerable<Frequencia> frequencias)
+        {
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Relatório de Frequência");
+
+            worksheet.Cell(1, 1).Value = "Mês de Referência";
+            worksheet.Cell(1, 2).Value = "Data Envio";
+            worksheet.Cell(1, 3).Value = "Status";
+
+            int linha = 2;
+            foreach (var freq in frequencias)
+            {
+                worksheet.Cell(linha, 1).Value = freq.MesReferencia;
+                worksheet.Cell(linha, 2).Value = freq.DataEnvio.ToShortDateString();
+                worksheet.Cell(linha, 3).Value = freq.StatusFrequencia?.Descricao ?? "-";
+                linha++;
+            }
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            return stream.ToArray();
+        }
+
     }
 }
