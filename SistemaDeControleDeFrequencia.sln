@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36221.1 d17.14
+VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sistema_de_Controle_de_Frequência", "Sistema_de_Controle_de_Frequência\Sistema_de_Controle_de_Frequência.csproj", "{E0AE3A90-1FE3-4320-80F3-A1387B076B4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaDeControleDeFrequencia", "Sistema_de_Controle_de_Frequência\SistemaDeControleDeFrequencia.csproj", "{E0AE3A90-1FE3-4320-80F3-A1387B076B4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

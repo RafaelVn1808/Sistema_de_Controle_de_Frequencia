@@ -1,4 +1,4 @@
-﻿namespace Sistema_de_Controle_de_Frequência.Model
+﻿namespace Sistema_de_Controle_de_Frequência.Models
 {
     public class StatusFrequencia
     {

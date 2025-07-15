@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sistema_de_Controle_de_Frequência.Model;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Sistema_de_Controle_de_Frequência.Models;
 
 namespace Sistema_de_Controle_de_Frequência.Data {
     public class AppDbContext : DbContext{
