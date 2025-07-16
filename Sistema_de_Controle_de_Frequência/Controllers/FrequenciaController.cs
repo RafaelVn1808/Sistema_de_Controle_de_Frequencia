@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sistema_de_Controle_de_Frequência.Models;
 using Sistema_de_Controle_de_Frequência.Services;
+using SistemaDeControleDeFrequencia.DTOs;
 
 namespace Sistema_de_Controle_de_Frequência.Controllers
 {
@@ -33,11 +34,18 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Frequencia frequencia)
+        public async Task<IActionResult> Post([FromBody] FrequenciaCreateDTO dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var frequencia = new Frequencia {
+                MesReferencia = dto.MesReferencia,
+                DataEnvio = dto.DataEnvio,
+                SetorId = dto.SetorId,
+                StatusFrequenciaId = dto.StatusFrequenciaId
+            };
+            
             try
             {
                 await _service.AddFrequenciaAsync(frequencia);
@@ -50,14 +58,22 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Frequencia frequencia)
+        public async Task<IActionResult> Put(int id, [FromBody] FrequenciaCreateDTO dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var frequencia = new Frequencia {
+                MesReferencia = dto.MesReferencia,
+                DataEnvio = dto.DataEnvio,
+                SetorId = dto.SetorId,
+                StatusFrequenciaId = dto.StatusFrequenciaId
+            };
+
             if (id != frequencia.Id)
                 return BadRequest();
 
+            
             await _service.UpdateFrequenciaAsync(frequencia);
             return NoContent();
         }
