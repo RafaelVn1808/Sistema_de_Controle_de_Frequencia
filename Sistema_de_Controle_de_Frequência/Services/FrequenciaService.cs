@@ -32,7 +32,10 @@ namespace Sistema_de_Controle_de_Frequência.Services
         }
 
         public async Task AddFrequenciaAsync(Frequencia frequencia)
-        {
+        { 
+            if (await _repository.ExistsBySetorAndMesReferenciaAsync(frequencia.SetorId, frequencia.MesReferencia))
+                throw new ArgumentException($"Já existe uma frequência cadastrada para o setor informado no mês {frequencia.MesReferencia}.");
+
             ValidarFrequencia(frequencia);
 
             if (!await _setorRepository.ExistsAsync(frequencia.SetorId))

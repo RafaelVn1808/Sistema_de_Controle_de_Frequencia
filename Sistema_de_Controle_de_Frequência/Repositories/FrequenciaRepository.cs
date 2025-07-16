@@ -51,5 +51,11 @@ namespace Sistema_de_Controle_de_Frequência.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> ExistsBySetorAndMesReferenciaAsync(int setorId, string mesReferencia)
+        {
+            return await _context.Frequencias
+                .AnyAsync(f => f.SetorId == setorId && f.MesReferencia == mesReferencia);
+        }
     }
 }

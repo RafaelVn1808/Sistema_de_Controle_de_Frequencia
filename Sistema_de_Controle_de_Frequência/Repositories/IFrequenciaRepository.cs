@@ -11,6 +11,8 @@ namespace Sistema_de_Controle_de_Frequência.Repositories
      Task AddAsync(Frequencia frequencia);
      Task UpdateAsync(Frequencia frequencia);
      Task DeleteAsync(int id);
-        
+
+     Task<bool> ExistsBySetorAndMesReferenciaAsync(int setorId, string mesReferencia);
+
     }
 }

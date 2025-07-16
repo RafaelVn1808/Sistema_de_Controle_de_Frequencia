@@ -21,7 +21,7 @@ namespace SistemaDeControleDeFrequencia.Services
             return setores.ToList();
         }
 
-        public async Task<List<Setor>> GetAllAsync() => await _repository.GetAllAsync();
+        
         public async Task<Setor> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
         public async Task AddAsync(Setor setor) => await _repository.AddAsync(setor);
         public async Task UpdateAsync(Setor setor) => await _repository.UpdateAsync(setor);
