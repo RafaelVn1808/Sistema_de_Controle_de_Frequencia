@@ -1,4 +1,4 @@
-﻿namespace SistemaDeControleDeFrequencia.DTOs {
+﻿namespace SistemaDeControleDeFrequencia.DTOs.Frequencia {
     public class FrequenciaCreateDTO {
 
         public string MesReferencia { get; set; }

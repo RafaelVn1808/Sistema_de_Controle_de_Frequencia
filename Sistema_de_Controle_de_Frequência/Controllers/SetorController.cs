@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sistema_de_Controle_de_Frequência.Models;
+using SistemaDeControleDeFrequencia.DTOs.Setor;
 using SistemaDeControleDeFrequencia.Services;
 
 namespace SistemaDeControleDeFrequencia.Controllers
@@ -34,15 +35,33 @@ namespace SistemaDeControleDeFrequencia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Setor setor)
+        public async Task<IActionResult> Post([FromBody] SetorDTO dto)           
         {
+            Setor setor = new Setor
+            {
+                Id = dto.Id,
+                Nome = dto.Nome,
+                NucleoId = dto.NucleoId,
+                Nucleo = dto.Nucleo
+            };
+                
+
             await _service.AddAsync(setor);
             return CreatedAtAction(nameof(Get), new { id = setor.Id }, setor);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Setor setor)
+        public async Task<IActionResult> Put(int id, [FromBody] SetorDTO dto)
         {
+
+            Setor setor = new Setor
+            {
+                Id = dto.Id,
+                Nome = dto.Nome,
+                NucleoId = dto.NucleoId,
+                Nucleo = dto.Nucleo
+            };
+
             if (id != setor.Id)
                 return BadRequest();
 

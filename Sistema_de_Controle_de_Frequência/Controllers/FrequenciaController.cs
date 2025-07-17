@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sistema_de_Controle_de_Frequência.Models;
 using Sistema_de_Controle_de_Frequência.Services;
-using SistemaDeControleDeFrequencia.DTOs;
+using SistemaDeControleDeFrequencia.DTOs.Frequencia;
 
 namespace Sistema_de_Controle_de_Frequência.Controllers
 {

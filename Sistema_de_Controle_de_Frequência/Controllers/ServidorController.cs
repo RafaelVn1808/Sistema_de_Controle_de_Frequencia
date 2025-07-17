@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sistema_de_Controle_de_Frequência.Models;
+using SistemaDeControleDeFrequencia.DTOs.Servidor;
 using SistemaDeControleDeFrequencia.Services;
 
 namespace SistemaDeControleDeFrequencia.Controllers {
@@ -27,14 +28,33 @@ namespace SistemaDeControleDeFrequencia.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Servidor servidor) {
+        public async Task<IActionResult> Post([FromBody] ServidorDTO dto) {
+
+            Servidor servidor = new Servidor {
+                Id = dto.Id,
+                Nome = dto.Nome,
+                Matricula = dto.Matricula,
+                id_setor = dto.id_setor,
+                Setor = dto.Setor,
+            };
+
             if (servidor == null) return BadRequest("Servidor cannot be null.");
             await _service.AddAsync(servidor);
             return CreatedAtAction(nameof(Get), new { id = servidor.Id }, servidor);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Servidor servidor) {
+        public async Task<IActionResult> Put(int id, [FromBody] ServidorDTO dto) {
+
+            Servidor servidor = new Servidor
+            {
+                Id = dto.Id,
+                Nome = dto.Nome,
+                Matricula = dto.Matricula,
+                id_setor = dto.id_setor,
+                Setor = dto.Setor,
+            };
+
             if (id != servidor.Id) return BadRequest("ID mismatch.");
             if (servidor == null) return BadRequest("Servidor cannot be null.");
             await _service.UpdateAsync(servidor);
