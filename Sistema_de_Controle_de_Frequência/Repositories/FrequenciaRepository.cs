@@ -17,17 +17,17 @@ namespace Sistema_de_Controle_de_Frequência.Repositories
         public async Task<IEnumerable<Frequencia>> GetAllAsync()
         {
             return await _context.Frequencias
-                .Include(f => f.StatusFrequencia)
-                .Include(f => f.Setor)
-                .ToListAsync();
+        .Include(f => f.Setor)
+        .Include(f => f.StatusFrequencia)
+        .ToListAsync();
         }
 
         public async Task<Frequencia> GetByIdAsync(int id)
         {
             return await _context.Frequencias
-                .Include(f => f.StatusFrequencia)
-                .Include(f => f.Setor)
-                .FirstOrDefaultAsync(f => f.Id == id);
+        .Include(f => f.StatusFrequencia)
+        .Include(f => f.Setor)
+        .FirstOrDefaultAsync(f => f.Id == id);
         }
 
         public async Task AddAsync(Frequencia frequencia)
