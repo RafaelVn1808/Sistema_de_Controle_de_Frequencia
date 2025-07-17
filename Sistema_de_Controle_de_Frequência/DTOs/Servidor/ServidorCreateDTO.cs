@@ -2,13 +2,13 @@
 
 namespace SistemaDeControleDeFrequencia.DTOs.Servidor
 {
-    public class ServidorDTO
+    public class ServidorCreateDTO
     {
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Matricula { get; set; }
         public int id_setor { get; set; }
-        public Setor Setor { get; set; }
-        public ICollection<FrequenciaServidor> FrequenciasServidores { get; set; }
+        
+        
     }
 }

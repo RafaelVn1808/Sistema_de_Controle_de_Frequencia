@@ -28,7 +28,7 @@ namespace SistemaDeControleDeFrequencia.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ServidorDTO dto) {
+        public async Task<IActionResult> Post([FromBody] ServidorCreateDTO dto) {
 
             Servidor servidor = new Servidor {
                 Id = dto.Id,
@@ -44,7 +44,7 @@ namespace SistemaDeControleDeFrequencia.Controllers {
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] ServidorDTO dto) {
+        public async Task<IActionResult> Put(int id, [FromBody] ServidorCreateDTO dto) {
 
             Servidor servidor = new Servidor
             {

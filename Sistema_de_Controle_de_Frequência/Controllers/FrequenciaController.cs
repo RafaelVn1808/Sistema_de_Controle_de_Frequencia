@@ -41,9 +41,8 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
 
             var frequencia = new Frequencia {
                 MesReferencia = dto.MesReferencia,
-                DataEnvio = dto.DataEnvio,
                 SetorId = dto.SetorId,
-                StatusFrequenciaId = dto.StatusFrequenciaId
+                
             };
             
             try
@@ -58,16 +57,15 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] FrequenciaCreateDTO dto)
+        public async Task<IActionResult> Put(int id, [FromBody] FrequenciaUpdateDTO dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var frequencia = new Frequencia {
                 MesReferencia = dto.MesReferencia,
-                DataEnvio = dto.DataEnvio,
                 SetorId = dto.SetorId,
-                StatusFrequenciaId = dto.StatusFrequenciaId
+                
             };
 
             if (id != frequencia.Id)

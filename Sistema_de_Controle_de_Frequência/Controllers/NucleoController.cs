@@ -24,7 +24,7 @@ namespace SistemaDeControleDeFrequencia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] NucleoDTO dto)
+        public async Task<IActionResult> Post([FromBody] NucleoUpdateDTO dto)
         {
             var nucleo = new Nucleo
             {
@@ -38,7 +38,7 @@ namespace SistemaDeControleDeFrequencia.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] NucleoDTO dto)
+        public async Task<IActionResult> Put(int id, [FromBody] NucleoUpdateDTO dto)
         {
             var nucleo = new Nucleo
             {  

@@ -11,7 +11,7 @@ namespace SistemaDeControleDeFrequencia.DTOs.Setor
         public int NucleoId { get; set; }
         public Nucleo Nucleo { get; set; }
 
-        public ICollection<ServidorDTO> ServidoresDTO { get; set; }
+        public ICollection<ServidorCreateDTO> ServidoresDTO { get; set; }
         public ICollection<FrequenciaCreateDTO> FrequenciasDTO { get; set; }
     }
 }
