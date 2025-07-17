@@ -17,16 +17,17 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<List<FrequenciaResponseDTO>>> GetAllAsync()
         {
-            var frequencias = await _service.GetAllFrequenciasAsync();
+            var frequencias = await _service.GetAllAsync();
             return Ok(frequencias);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var frequencia = await _service.GetFrequenciaByIdAsync(id);
+            var frequencia = await _service.GetByIdAsync(id);
             if (frequencia == null)
                 return NotFound();
 
@@ -62,16 +63,16 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (id != dto.Id)
+                return BadRequest("O ID informado na URL não corresponde ao ID do corpo da requisição.");
+
             var frequencia = new Frequencia {
+                Id = dto.Id,
                 MesReferencia = dto.MesReferencia,
                 SetorId = dto.SetorId,
                 
-            };
+            };         
 
-            if (id != frequencia.Id)
-                return BadRequest();
-
-            
             await _service.UpdateFrequenciaAsync(frequencia);
             return NoContent();
         }

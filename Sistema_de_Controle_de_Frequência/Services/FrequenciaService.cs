@@ -34,9 +34,35 @@ namespace Sistema_de_Controle_de_Frequência.Services
             return await _repository.GetAllAsync();
         }
 
-        public async Task<Frequencia> GetFrequenciaByIdAsync(int id)
+        public async Task<FrequenciaResponseDTO> GetByIdAsync(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            var frequencia = await _repository.GetByIdAsync(id);
+
+            if (frequencia == null) return null;
+
+            return new FrequenciaResponseDTO
+            {
+                Id = frequencia.Id,
+                MesReferencia = frequencia.MesReferencia,
+                DataEnvio = frequencia.DataEnvio,
+                SetorNome = frequencia.Setor.Nome,
+                StatusFrequenciaNome = frequencia.StatusFrequencia.Nome
+            };
+        }
+
+        public async Task<List<FrequenciaResponseDTO>> GetAllAsync()
+        {
+
+            var frequencias = await _repository.GetAllAsync();
+
+            return frequencias.Select(f => new FrequenciaResponseDTO
+            {
+                Id = f.Id,
+                MesReferencia = f.MesReferencia,
+                DataEnvio = f.DataEnvio,
+                SetorNome = f.Setor.Nome,
+                StatusFrequenciaNome = f.StatusFrequencia.Nome
+            }).ToList();
         }
 
         public async Task AddFrequenciaAsync(Frequencia frequencia)
@@ -79,25 +105,7 @@ namespace Sistema_de_Controle_de_Frequência.Services
                 throw new ArgumentException("Data de envio não pode ser uma data futura.");
         }
 
-        public async Task<List<FrequenciaResponseDTO>> GetAllAsync()
-        {
-            var frequencias = await _context.Frequencias
-                .Include(f => f.Setor)
-                .Include(f => f.StatusFrequencia)
-                .ToListAsync();
-
-            var dtoList = frequencias.Select(f => new FrequenciaResponseDTO
-            {
-                Id = f.Id,
-                MesReferencia = f.MesReferencia,
-                DataEnvio = f.DataEnvio,
-                SetorNome = f.Setor.Nome,
-                StatusFrequenciaNome = f.StatusFrequencia.Nome
-            }).ToList();
-
-            return dtoList;
-        }
-
+        
 
         //Método para gerar o relatório PDF
         public byte[] GerarRelatorioPdf(IEnumerable<Frequencia> frequencias)
