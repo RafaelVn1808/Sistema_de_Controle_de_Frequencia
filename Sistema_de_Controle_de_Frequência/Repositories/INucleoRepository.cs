@@ -6,6 +6,7 @@ namespace SistemaDeControleDeFrequencia.Repositories
     {
         Task<IEnumerable<Nucleo>> GetAllAsync();
         Task<Nucleo> GetByIdAsync(int id);
+        Task<Setor> GetByNomeAsync(string nome);
         Task AddAsync(Nucleo nucleo);
         Task UpdateAsync(Nucleo nucleo);
         Task DeleteAsync(int id);

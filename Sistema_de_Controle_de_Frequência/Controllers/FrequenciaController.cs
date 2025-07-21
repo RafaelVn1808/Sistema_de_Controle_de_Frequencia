@@ -2,6 +2,7 @@
 using Sistema_de_Controle_de_Frequência.Models;
 using Sistema_de_Controle_de_Frequência.Services;
 using SistemaDeControleDeFrequencia.DTOs.Frequencia;
+using SistemaDeControleDeFrequencia.DTOs.Servidor;
 
 namespace Sistema_de_Controle_de_Frequência.Controllers
 {
@@ -35,27 +36,23 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] FrequenciaCreateDTO dto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        public async Task<IActionResult> Create(FrequenciaCreateDTO dto) {
 
             var frequencia = new Frequencia {
-                MesReferencia = dto.MesReferencia,
+                MesReferencia = dto.MesReferencia, 
                 SetorId = dto.SetorId,
                 
             };
-            
-            try
-            {
-                await _service.AddFrequenciaAsync(frequencia);
-                return CreatedAtAction(nameof(Get), new { id = frequencia.Id }, frequencia);
+
+            try {
+                await _service.AddAsync(dto);
+                return Ok("Servidor criado com sucesso.");
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { error = ex.Message });
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
             }
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] FrequenciaUpdateDTO dto)

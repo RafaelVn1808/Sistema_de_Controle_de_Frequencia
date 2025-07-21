@@ -4,52 +4,51 @@ using Sistema_de_Controle_de_Frequência.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Sistema_de_Controle_de_Frequência.Repositories
-{
-    public class SetorRepository : ISetorRepository
-    {
+namespace Sistema_de_Controle_de_Frequência.Repositories {
+    public class SetorRepository : ISetorRepository {
         private readonly AppDbContext _context;
 
-        public SetorRepository(AppDbContext context)
-        {
+        public SetorRepository(AppDbContext context) {
             _context = context;
         }
 
-        public async Task<IEnumerable<Setor>> GetAllAsync()
-        {
-            return await _context.Setores.Include(s => s.Nucleo).ToListAsync();
+        public async Task<Setor> GetByNomeAsync(string nome) {
+            return await _context.Setores
+                .Include(s => s.Nucleo) 
+                .FirstOrDefaultAsync(s => s.Nome == nome);
         }
 
-        public async Task<Setor> GetByIdAsync(int id)
-        {
-            return await _context.Setores.Include(s => s.Nucleo)
-                                         .FirstOrDefaultAsync(s => s.Id == id);
+        public async Task<IEnumerable<Setor>> GetAllAsync() {
+            return await _context.Setores
+                .Include(s => s.Nucleo)
+                .ToListAsync();
         }
 
-        public async Task AddAsync(Setor setor)
-        {
-            _context.Setores.Add(setor);
+        public async Task<Setor> GetByIdAsync(int id) {
+            return await _context.Setores
+                .Include(s => s.Nucleo)
+                .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        public async Task AddAsync(Setor setor) {
+            await _context.Setores.AddAsync(setor);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Setor setor)
-        {
+        public async Task UpdateAsync(Setor setor) {
             _context.Setores.Update(setor);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
-        {
+        public async Task DeleteAsync(int id) {
             var setor = await GetByIdAsync(id);
-            if (setor != null)
-            {
+            if (setor != null) {
                 _context.Setores.Remove(setor);
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task<bool> ExistsAsync(int id)
-        {
+        public async Task<bool> ExistsAsync(int id) {
             return await _context.Setores.AnyAsync(s => s.Id == id);
         }
     }

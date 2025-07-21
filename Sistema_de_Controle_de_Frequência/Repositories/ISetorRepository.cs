@@ -8,6 +8,8 @@ namespace Sistema_de_Controle_de_Frequência.Repositories
     {
         Task<IEnumerable<Setor>> GetAllAsync();
         Task<Setor> GetByIdAsync(int id);
+        Task<Setor> GetByNomeAsync(string nome);
+
         Task AddAsync(Setor setor);
         Task UpdateAsync(Setor setor);
         Task DeleteAsync(int id);
