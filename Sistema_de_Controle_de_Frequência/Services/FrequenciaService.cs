@@ -135,5 +135,24 @@ namespace Sistema_de_Controle_de_Frequência.Services
             return stream.ToArray();
         }
 
+        public async Task AlterarStatusAsync(int frequenciaId, int novoStatusId)
+        {
+            var frequencia = await _repository.GetByIdAsync(frequenciaId);
+            if (frequencia == null)
+                throw new Exception("Frequência não encontrada.");
+
+            if (frequencia.StatusFrequencia.Nome == "Lançado")
+                throw new Exception("Não é possível alterar uma frequência já Lançada.");
+
+            var novoStatus = await _statusFrequenciaRepository.GetByIdAsync(novoStatusId);
+            if (novoStatus == null)
+                throw new Exception("Status informado não existe.");
+
+            frequencia.StatusFrequenciaId = novoStatusId;
+
+            await _repository.UpdateAsync(frequencia);
+        }
+
+
     }
 }

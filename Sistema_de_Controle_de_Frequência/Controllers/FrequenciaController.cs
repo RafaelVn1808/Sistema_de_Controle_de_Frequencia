@@ -97,6 +97,21 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
             return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RelatorioFrequencias.xlsx");
         }
 
+        [HttpPut("alterar-status")]
+        public async Task<IActionResult> AlterarStatus([FromBody] AlterarStatusFrequenciaDTO dto)
+        {
+            try
+            {
+                await _service.AlterarStatusAsync(dto.FrequenciaId, dto.NovoStatusId);
+                return Ok("Status alterado com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
 
     }
