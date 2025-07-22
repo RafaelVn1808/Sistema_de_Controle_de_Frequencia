@@ -115,9 +115,6 @@ namespace SistemaDeControleDeFrequencia.Migrations
                     b.Property<int>("SetorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("id_setor")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SetorId");
@@ -135,12 +132,15 @@ namespace SistemaDeControleDeFrequencia.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("NucleoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Nome")
+                        .IsUnique();
 
                     b.HasIndex("NucleoId");
 
@@ -166,6 +166,32 @@ namespace SistemaDeControleDeFrequencia.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Status_Frequencia", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Descricao = "Frequência ainda não enviada ao RH.",
+                            Nome = "Pendente"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Descricao = "Frequência recebida pelo RH.",
+                            Nome = "Recebido"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Descricao = "Frequência conferida e regularizada.",
+                            Nome = "Regularizado"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Descricao = "Frequência lançada oficialmente pelo RH.",
+                            Nome = "Lançado"
+                        });
                 });
 
             modelBuilder.Entity("Sistema_de_Controle_de_Frequência.Models.Frequencia", b =>

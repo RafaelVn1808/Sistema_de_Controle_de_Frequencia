@@ -40,6 +40,12 @@ namespace Sistema_de_Controle_de_Frequência.Data {
             modelBuilder.Entity<Setor>()
                 .HasIndex(s => s.Nome)
                 .IsUnique();
+
+            modelBuilder.Entity<StatusFrequencia>().HasData(
+                new StatusFrequencia { Id = 1, Nome = "Pendente", Descricao = "Frequência ainda não enviada ao RH." },
+                new StatusFrequencia { Id = 2, Nome = "Recebido", Descricao = "Frequência recebida pelo RH." },
+                new StatusFrequencia { Id = 3, Nome = "Regularizado", Descricao = "Frequência conferida e regularizada." },
+                new StatusFrequencia { Id = 4, Nome = "Lançado", Descricao = "Frequência lançada oficialmente pelo RH." });
         }
 
 
