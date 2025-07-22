@@ -72,6 +72,14 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
             return NoContent();
         }
 
+        [HttpPut("status")]
+        public async Task<IActionResult> UpdateStatus([FromBody] FrequenciaUpdateStatusDTO dto)
+        {
+            await _service.UpdateStatusAsync(dto);
+            return Ok("Status da frequência atualizado com sucesso.");
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

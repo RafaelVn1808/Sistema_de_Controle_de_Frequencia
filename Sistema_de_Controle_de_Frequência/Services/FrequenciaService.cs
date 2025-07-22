@@ -49,7 +49,7 @@ namespace Sistema_de_Controle_de_Frequência.Services
                 MesReferencia = frequencia.MesReferencia,
                 DataEnvio = frequencia.DataEnvio,
                 SetorNome = frequencia.Setor.Nome,
-                StatusFrequenciaNome = frequencia.StatusFrequencia.Nome
+                StatusNome = frequencia.StatusFrequencia.Nome
             };
         }
 
@@ -63,31 +63,40 @@ namespace Sistema_de_Controle_de_Frequência.Services
                 MesReferencia = f.MesReferencia,
                 DataEnvio = f.DataEnvio,
                 SetorNome = f.Setor.Nome,
-                StatusFrequenciaNome = f.StatusFrequencia.Nome
+                StatusNome = f.StatusFrequencia.Nome
             }).ToList();
         }
 
         public async Task AddAsync(FrequenciaCreateDTO dto)
         {
-            var setor = await _setorRepository.GetByIdAsync(dto.SetorId);
-            if (setor == null)
-                throw new Exception("Setor informado não foi encontrado.");
-
-            var statusPendente = await _statusRepository.GetByNomeAsync("Pendente");
-            if (statusPendente == null)
-                throw new Exception("Status 'Pendente' não encontrado.");
+            if (await _repository.ExistsByMesReferenciaAndSetorAsync(dto.MesReferencia, dto.SetorId))
+                throw new Exception("Já existe uma frequência cadastrada para este Setor e Mês/Ano.");
 
             var frequencia = new Frequencia
             {
                 MesReferencia = dto.MesReferencia,
-                DataEnvio = DateTime.Now,
                 SetorId = dto.SetorId,
-                StatusFrequenciaId = statusPendente.Id
+                DataEnvio = DateTime.Now,
+                StatusFrequenciaId = 1 // 'Pendente'
             };
 
             _context.Frequencias.Add(frequencia);
             await _context.SaveChangesAsync();
+
+            var servidoresDoSetor = await _context.Servidores
+                .Where(s => s.SetorId == dto.SetorId)
+                .ToListAsync();
+
+            var vinculos = servidoresDoSetor.Select(servidor => new FrequenciaServidor
+            {
+                FrequenciaId = frequencia.Id,
+                ServidorId = servidor.Id
+            }).ToList();
+
+            _context.FrequenciasServidores.AddRange(vinculos);
+            await _context.SaveChangesAsync();
         }
+
 
         public async Task UpdateFrequenciaAsync(Frequencia frequencia)
         {
@@ -159,5 +168,20 @@ namespace Sistema_de_Controle_de_Frequência.Services
 
             await _repository.UpdateAsync(frequencia);
         }
+
+        public async Task UpdateStatusAsync(FrequenciaUpdateStatusDTO dto)
+        {
+            var frequencia = await _context.Frequencias.FindAsync(dto.FrequenciaId);
+            if (frequencia == null)
+                throw new Exception("Frequência não encontrada.");
+
+            
+            if (!Enum.IsDefined(typeof(StatusFrequencia), dto.StatusFrequenciaId))
+                throw new Exception("Status inválido.");
+
+            frequencia.StatusFrequenciaId = dto.StatusFrequenciaId;
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

@@ -14,5 +14,8 @@ namespace Sistema_de_Controle_de_Frequência.Repositories
 
      Task<bool> ExistsBySetorAndMesReferenciaAsync(int setorId, string mesReferencia);
 
+     Task<bool> ExistsByMesReferenciaAndSetorAsync(string mesReferencia, int setorId);
+
+
     }
 }

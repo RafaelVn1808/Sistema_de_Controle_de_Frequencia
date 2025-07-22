@@ -57,5 +57,12 @@ namespace Sistema_de_Controle_de_Frequência.Repositories
             return await _context.Frequencias
                 .AnyAsync(f => f.SetorId == setorId && f.MesReferencia == mesReferencia);
         }
+
+        public async Task<bool> ExistsByMesReferenciaAndSetorAsync(string mesReferencia, int setorId)
+        {
+            return await _context.Frequencias
+                .AnyAsync(f => f.MesReferencia == mesReferencia && f.SetorId == setorId);
+        }
+
     }
 }
