@@ -5,8 +5,11 @@ using Sistema_de_Controle_de_Frequência.Data;
 using Sistema_de_Controle_de_Frequência.Models;
 using Sistema_de_Controle_de_Frequência.Repositories;
 using SistemaDeControleDeFrequencia.DTOs.Frequencia;
-using SistemaDeControleDeFrequencia.DTOs.Servidor;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Sistema_de_Controle_de_Frequência.Services
 {
@@ -16,7 +19,6 @@ namespace Sistema_de_Controle_de_Frequência.Services
         private readonly ISetorRepository _setorRepository;
         private readonly IStatusFrequenciaRepository _statusRepository;
         private readonly AppDbContext _context;
-
 
         public FrequenciaService(
             IFrequenciaRepository repository,
@@ -53,7 +55,6 @@ namespace Sistema_de_Controle_de_Frequência.Services
 
         public async Task<List<FrequenciaResponseDTO>> GetAllAsync()
         {
-
             var frequencias = await _repository.GetAllAsync();
 
             return frequencias.Select(f => new FrequenciaResponseDTO
@@ -66,17 +67,27 @@ namespace Sistema_de_Controle_de_Frequência.Services
             }).ToList();
         }
 
-        public async Task AddAsync(FrequenciaCreateDTO dto) {
-            var frequencia = new Frequencia {
+        public async Task AddAsync(FrequenciaCreateDTO dto)
+        {
+            var setor = await _setorRepository.GetByIdAsync(dto.SetorId);
+            if (setor == null)
+                throw new Exception("Setor informado não foi encontrado.");
+
+            var statusPendente = await _statusRepository.GetByNomeAsync("Pendente");
+            if (statusPendente == null)
+                throw new Exception("Status 'Pendente' não encontrado.");
+
+            var frequencia = new Frequencia
+            {
                 MesReferencia = dto.MesReferencia,
+                DataEnvio = DateTime.Now,
                 SetorId = dto.SetorId,
-                
+                StatusFrequenciaId = statusPendente.Id
             };
 
             _context.Frequencias.Add(frequencia);
             await _context.SaveChangesAsync();
         }
-
 
         public async Task UpdateFrequenciaAsync(Frequencia frequencia)
         {
@@ -102,16 +113,12 @@ namespace Sistema_de_Controle_de_Frequência.Services
                 throw new ArgumentException("Data de envio não pode ser uma data futura.");
         }
 
-        
-
-        //Método para gerar o relatório PDF
         public byte[] GerarRelatorioPdf(IEnumerable<Frequencia> frequencias)
         {
             var documento = new FrequenciaReportDocument(frequencias);
             return documento.GeneratePdf();
         }
 
-        //étodo para gerar o relatório Excel
         public byte[] GerarRelatorioExcel(IEnumerable<Frequencia> frequencias)
         {
             using var workbook = new XLWorkbook();
@@ -144,7 +151,7 @@ namespace Sistema_de_Controle_de_Frequência.Services
             if (frequencia.StatusFrequencia.Nome == "Lançado")
                 throw new Exception("Não é possível alterar uma frequência já Lançada.");
 
-            var novoStatus = await _statusFrequenciaRepository.GetByIdAsync(novoStatusId);
+            var novoStatus = await _statusRepository.GetByIdAsync(novoStatusId);
             if (novoStatus == null)
                 throw new Exception("Status informado não existe.");
 
@@ -152,7 +159,5 @@ namespace Sistema_de_Controle_de_Frequência.Services
 
             await _repository.UpdateAsync(frequencia);
         }
-
-
     }
 }

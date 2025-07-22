@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sistema_de_Controle_de_Frequência.Models;
 using Sistema_de_Controle_de_Frequência.Services;
 using SistemaDeControleDeFrequencia.DTOs.Frequencia;
-using SistemaDeControleDeFrequencia.DTOs.Servidor;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Sistema_de_Controle_de_Frequência.Controllers
 {
@@ -24,7 +24,6 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
             return Ok(frequencias);
         }
 
-
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -36,23 +35,21 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(FrequenciaCreateDTO dto) {
+        public async Task<IActionResult> Create([FromBody] FrequenciaCreateDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var frequencia = new Frequencia {
-                MesReferencia = dto.MesReferencia, 
-                SetorId = dto.SetorId,
-                
-            };
-
-            try {
+            try
+            {
                 await _service.AddAsync(dto);
-                return Ok("Servidor criado com sucesso.");
+                return Ok("Frequência criada com sucesso.");
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] FrequenciaUpdateDTO dto)
@@ -63,14 +60,15 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
             if (id != dto.Id)
                 return BadRequest("O ID informado na URL não corresponde ao ID do corpo da requisição.");
 
-            var frequencia = new Frequencia {
+            await _service.UpdateFrequenciaAsync(new Models.Frequencia
+            {
                 Id = dto.Id,
                 MesReferencia = dto.MesReferencia,
                 SetorId = dto.SetorId,
-                
-            };         
+                StatusFrequenciaId = dto.StatusFrequenciaId,
+                DataEnvio = dto.DataEnvio
+            });
 
-            await _service.UpdateFrequenciaAsync(frequencia);
             return NoContent();
         }
 
@@ -110,9 +108,5 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
-
-
     }
 }

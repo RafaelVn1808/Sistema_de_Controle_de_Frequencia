@@ -50,5 +50,11 @@ namespace Sistema_de_Controle_de_Frequência.Repositories
         {
             return await _context.StatusFrequencias.AnyAsync(s => s.Id == id);
         }
+
+        public async Task<StatusFrequencia> GetByNomeAsync(string nome)
+        {
+            return await _context.StatusFrequencias.FirstOrDefaultAsync(s => s.Nome == nome);
+        }
+
     }
 }

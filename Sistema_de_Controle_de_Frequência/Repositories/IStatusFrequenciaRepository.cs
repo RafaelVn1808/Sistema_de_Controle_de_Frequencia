@@ -11,5 +11,7 @@ namespace Sistema_de_Controle_de_Frequência.Repositories
         Task UpdateAsync(StatusFrequencia status);
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
+        Task<StatusFrequencia> GetByNomeAsync(string nome);
+
     }
 }
