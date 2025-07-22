@@ -37,6 +37,9 @@ namespace Sistema_de_Controle_de_Frequência.Data {
             modelBuilder.Entity<StatusFrequencia>().ToTable("Status_Frequencia");
             modelBuilder.Entity<Frequencia>().ToTable("Frequencia");
             modelBuilder.Entity<FrequenciaServidor>().ToTable("Frequencia_Servidor");
+            modelBuilder.Entity<Setor>()
+                .HasIndex(s => s.Nome)
+                .IsUnique();
         }
 
 

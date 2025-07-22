@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sistema_de_Controle_de_Frequência.Models;
 using SistemaDeControleDeFrequencia.DTOs.Servidor;
 using SistemaDeControleDeFrequencia.Services;
+using System.Threading.Tasks;
 
 namespace SistemaDeControleDeFrequencia.Controllers {
-    
     [ApiController]
     [Route("api/[controller]")]
     public class ServidorController : ControllerBase {
-
         private readonly ServidorService _service;
 
         public ServidorController(ServidorService service) {
@@ -29,35 +27,16 @@ namespace SistemaDeControleDeFrequencia.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ServidorCreateDTO dto) {
-
-            Servidor servidor = new Servidor {
-                Id = dto.Id,
-                Nome = dto.Nome,
-                Matricula = dto.Matricula,
-                id_setor = dto.id_setor,
-                Setor = dto.Setor,
-            };
-
-            if (servidor == null) return BadRequest("Servidor cannot be null.");
-            await _service.AddAsync(servidor);
-            return CreatedAtAction(nameof(Get), new { id = servidor.Id }, servidor);
+            await _service.AddAsync(dto);
+            return Ok("Servidor criado com sucesso.");
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] ServidorCreateDTO dto) {
+        public async Task<IActionResult> Put(int id, [FromBody] ServidorUpdateDTO dto) {
+            if (id != dto.Id)
+                return BadRequest("ID da URL difere do ID do corpo da requisição.");
 
-            Servidor servidor = new Servidor
-            {
-                Id = dto.Id,
-                Nome = dto.Nome,
-                Matricula = dto.Matricula,
-                id_setor = dto.id_setor,
-                Setor = dto.Setor,
-            };
-
-            if (id != servidor.Id) return BadRequest("ID mismatch.");
-            if (servidor == null) return BadRequest("Servidor cannot be null.");
-            await _service.UpdateAsync(servidor);
+            await _service.UpdateAsync(dto);
             return NoContent();
         }
 
@@ -65,9 +44,9 @@ namespace SistemaDeControleDeFrequencia.Controllers {
         public async Task<IActionResult> Delete(int id) {
             var servidor = await _service.GetByIdAsync(id);
             if (servidor == null) return NotFound();
+
             await _service.DeleteAsync(id);
             return NoContent();
         }
-
     }
 }

@@ -4,10 +4,11 @@ namespace SistemaDeControleDeFrequencia.DTOs.Servidor
 {
     public class ServidorCreateDTO
     {
+
         public string Nome { get; set; }
         public string Matricula { get; set; }
-        public int id_setor { get; set; }
-        
-        
+        public string NomeSetor { get; set; }
+
+
     }
 }

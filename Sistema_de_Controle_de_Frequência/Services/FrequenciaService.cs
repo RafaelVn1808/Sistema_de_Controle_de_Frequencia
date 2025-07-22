@@ -5,6 +5,7 @@ using Sistema_de_Controle_de_Frequência.Data;
 using Sistema_de_Controle_de_Frequência.Models;
 using Sistema_de_Controle_de_Frequência.Repositories;
 using SistemaDeControleDeFrequencia.DTOs.Frequencia;
+using SistemaDeControleDeFrequencia.DTOs.Servidor;
 
 
 namespace Sistema_de_Controle_de_Frequência.Services
@@ -65,21 +66,17 @@ namespace Sistema_de_Controle_de_Frequência.Services
             }).ToList();
         }
 
-        public async Task AddFrequenciaAsync(Frequencia frequencia)
-        { 
-            if (await _repository.ExistsBySetorAndMesReferenciaAsync(frequencia.SetorId, frequencia.MesReferencia))
-                throw new ArgumentException($"Já existe uma frequência cadastrada para o setor informado no mês {frequencia.MesReferencia}.");
+        public async Task AddAsync(FrequenciaCreateDTO dto) {
+            var frequencia = new Frequencia {
+                MesReferencia = dto.MesReferencia,
+                SetorId = dto.SetorId,
+                
+            };
 
-            ValidarFrequencia(frequencia);
-
-            if (!await _setorRepository.ExistsAsync(frequencia.SetorId))
-                throw new ArgumentException("Setor informado não existe.");
-
-            if (!await _statusRepository.ExistsAsync(frequencia.StatusFrequenciaId))
-                throw new ArgumentException("Status de frequência informado não existe.");
-
-            await _repository.AddAsync(frequencia);
+            _context.Frequencias.Add(frequencia);
+            await _context.SaveChangesAsync();
         }
+
 
         public async Task UpdateFrequenciaAsync(Frequencia frequencia)
         {

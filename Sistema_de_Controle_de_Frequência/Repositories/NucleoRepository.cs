@@ -31,5 +31,10 @@ namespace SistemaDeControleDeFrequencia.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<Setor> GetByNomeAsync(string nome) {
+            return await _context.Setores
+                .Include(s => s.Nucleo)
+                .FirstOrDefaultAsync(s => s.Nome == nome);
+        }
     }
 }
