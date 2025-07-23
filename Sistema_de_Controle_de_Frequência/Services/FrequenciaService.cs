@@ -183,5 +183,73 @@ namespace Sistema_de_Controle_de_Frequência.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<FrequenciaIndividualResponseDTO> GetIndividualAsync(FrequenciaIndividualFiltroDTO dto)
+        {
+            var frequencia = await _context.FrequenciasServidores
+                .Include(fs => fs.Frequencia)
+                    .ThenInclude(f => f.Setor)
+                .Include(fs => fs.Servidor)
+                .Where(fs => fs.ServidorId == dto.ServidorId &&
+                             fs.Frequencia.MesReferencia == dto.MesReferencia)
+                .Select(fs => new FrequenciaIndividualResponseDTO
+                {
+                    ServidorNome = fs.Servidor.Nome,
+                    SetorNome = fs.Servidor.Setor.Nome,
+                    MesReferencia = fs.Frequencia.MesReferencia,
+                    StatusNome = fs.Frequencia.StatusFrequencia.Nome,
+                    DataEnvio = fs.Frequencia.DataEnvio
+                })
+                .FirstOrDefaultAsync();
+
+            if (frequencia == null)
+                throw new Exception("Nenhuma frequência encontrada para esse servidor no mês informado.");
+
+            return frequencia;
+        }
+
+        public async Task<ResultadoPaginadoDTO<FrequenciaResponseDTO>> GetPaginadoAsync(FrequenciaFiltroPaginadoDTO filtro)
+        {
+            var query = _context.Frequencias
+                .Include(f => f.Setor)
+                .Include(f => f.StatusFrequencia)
+                .AsQueryable();
+
+            // Filtros dinâmicos
+            if (!string.IsNullOrWhiteSpace(filtro.MesReferencia))
+                query = query.Where(f => f.MesReferencia == filtro.MesReferencia);
+
+            if (filtro.SetorId.HasValue)
+                query = query.Where(f => f.SetorId == filtro.SetorId.Value);
+
+            if (filtro.StatusFrequenciaId.HasValue)
+                query = query.Where(f => f.StatusFrequenciaId == filtro.StatusFrequenciaId.Value);
+
+            var totalRegistros = await query.CountAsync();
+            var totalPaginas = (int)Math.Ceiling((double)totalRegistros / filtro.TamanhoPagina);
+
+            var dados = await query
+                .OrderByDescending(f => f.DataEnvio)
+                .Skip((filtro.Pagina - 1) * filtro.TamanhoPagina)
+                .Take(filtro.TamanhoPagina)
+                .Select(f => new FrequenciaResponseDTO
+                {
+                    Id = f.Id,
+                    MesReferencia = f.MesReferencia,
+                    SetorNome = f.Setor.Nome,
+                    StatusNome = f.StatusFrequencia.Nome,
+                    DataEnvio = f.DataEnvio
+                })
+                .ToListAsync();
+
+            return new ResultadoPaginadoDTO<FrequenciaResponseDTO>
+            {
+                Dados = dados,
+                PaginaAtual = filtro.Pagina,
+                TotalPaginas = totalPaginas,
+                TotalRegistros = totalRegistros
+            };
+        }
+
+
     }
 }

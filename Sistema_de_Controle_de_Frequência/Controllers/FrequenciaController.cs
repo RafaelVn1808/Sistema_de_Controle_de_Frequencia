@@ -116,5 +116,21 @@ namespace Sistema_de_Controle_de_Frequência.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("relatorio-individual")]
+        public async Task<IActionResult> GetRelatorioIndividual([FromBody] FrequenciaIndividualFiltroDTO dto)
+        {
+            var result = await _service.GetIndividualAsync(dto);
+            return Ok(result);
+        }
+
+        [HttpGet("paginado")]
+        public async Task<IActionResult> GetPaginado([FromQuery] FrequenciaFiltroPaginadoDTO filtro)
+        {
+            var resultado = await _service.GetPaginadoAsync(filtro);
+            return Ok(resultado);
+        }
+
+
     }
 }
